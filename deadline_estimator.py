@@ -72,7 +72,7 @@ def get_args():
         "--plot-term",
         type=str,
         default="wxt",
-        help="gnuplot terminal (ex: 'dumb size 128,48')",
+        help="gnuplot terminal (ex: 'wxt', 'qt', 'dumb size 128,48', 'png size 800,450')",
     )
     parser.add_argument("estimate_fpath", type=str, help="estimate filepath")
     parser.add_argument(
@@ -225,6 +225,13 @@ def plot_pdf_histogram(totals, num_bins=NUM_BINS, deadline=None, gnuplot_term="w
         )
         plots.append(plot_deadline)
 
+    kwargs = {}
+    if gnuplot_term.startswith("png"):
+        kwargs["output"] = "deadline_estimate_pdf.png"
+    if gnuplot_term.startswith("gif"):
+        kwargs["output"] = "deadline_estimate_pdf.gif"
+    if gnuplot_term.startswith("jpeg"):
+        kwargs["output"] = "deadline_estimate_pdf.jpg"
     gp.plot(
         *plots,
         title="PDF of Project Completion Date",
@@ -232,8 +239,11 @@ def plot_pdf_histogram(totals, num_bins=NUM_BINS, deadline=None, gnuplot_term="w
         ylabel="Probability Density",
         xrange=(start, end),
         terminal=gnuplot_term,
+        **kwargs,
     )
-    if not gnuplot_term.startswith("dumb"):
+    if not any(
+        gnuplot_term.startswith(term) for term in ["dumb", "png", "gif", "jpeg"]
+    ):
         gp.wait()
 
 
@@ -261,6 +271,13 @@ def plot_cdf_histogram(totals, num_bins=NUM_BINS, deadline=None, gnuplot_term="w
         )
         plots.append(plot_deadline)
 
+    kwargs = {}
+    if gnuplot_term.startswith("png"):
+        kwargs["output"] = "deadline_estimate_cdf.png"
+    if gnuplot_term.startswith("gif"):
+        kwargs["output"] = "deadline_estimate_cdf.gif"
+    if gnuplot_term.startswith("jpeg"):
+        kwargs["output"] = "deadline_estimate_cdf.jpg"
     gp.plot(
         *plots,
         title="CDF of Project Completion Date",
@@ -268,8 +285,11 @@ def plot_cdf_histogram(totals, num_bins=NUM_BINS, deadline=None, gnuplot_term="w
         ylabel="Cumulative Probability",
         xrange=(start, end),
         terminal=gnuplot_term,
+        **kwargs,
     )
-    if not gnuplot_term.startswith("dumb"):
+    if not any(
+        gnuplot_term.startswith(term) for term in ["dumb", "png", "gif", "jpeg"]
+    ):
         gp.wait()
 
 
