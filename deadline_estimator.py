@@ -72,7 +72,7 @@ def get_args():
         "--plot-term",
         type=str,
         default="wxt",
-        help="gnuplot terminal (ex: 'wxt', 'qt', 'dumb size 128,48', 'png size 800,450')",
+        help="gnuplot terminal (ex: 'wxt', 'qt', 'x11', 'dumb size 128,48', 'png size 800,450', 'svg')",
     )
     parser.add_argument("estimate_fpath", type=str, help="estimate filepath")
     parser.add_argument(
@@ -232,6 +232,8 @@ def plot_pdf_histogram(totals, num_bins=NUM_BINS, deadline=None, gnuplot_term="w
         kwargs["output"] = "deadline_estimate_pdf.gif"
     if gnuplot_term.startswith("jpeg"):
         kwargs["output"] = "deadline_estimate_pdf.jpg"
+    if gnuplot_term.startswith("svg"):
+        kwargs["output"] = "deadline_estimate_pdf.svg"
     gp.plot(
         *plots,
         title="PDF of Project Completion Date",
@@ -242,7 +244,7 @@ def plot_pdf_histogram(totals, num_bins=NUM_BINS, deadline=None, gnuplot_term="w
         **kwargs,
     )
     if not any(
-        gnuplot_term.startswith(term) for term in ["dumb", "png", "gif", "jpeg"]
+        gnuplot_term.startswith(term) for term in ["dumb", "png", "gif", "jpeg", "svg"]
     ):
         gp.wait()
 
@@ -278,6 +280,8 @@ def plot_cdf_histogram(totals, num_bins=NUM_BINS, deadline=None, gnuplot_term="w
         kwargs["output"] = "deadline_estimate_cdf.gif"
     if gnuplot_term.startswith("jpeg"):
         kwargs["output"] = "deadline_estimate_cdf.jpg"
+    if gnuplot_term.startswith("svg"):
+        kwargs["output"] = "deadline_estimate_cdf.svg"
     gp.plot(
         *plots,
         title="CDF of Project Completion Date",
@@ -288,7 +292,7 @@ def plot_cdf_histogram(totals, num_bins=NUM_BINS, deadline=None, gnuplot_term="w
         **kwargs,
     )
     if not any(
-        gnuplot_term.startswith(term) for term in ["dumb", "png", "gif", "jpeg"]
+        gnuplot_term.startswith(term) for term in ["dumb", "png", "gif", "jpeg", "svg"]
     ):
         gp.wait()
 
