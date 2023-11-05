@@ -45,8 +45,8 @@ from scipy.optimize import differential_evolution
 # for these parameters
 
 parameter_bounds = [
-    (0.0001, 10.0),  # lognorm shape range
-    (0.0001, 10.0),  # lognorm scale range
+    (0.0001, 50.0),  # lognorm shape range
+    (0.0001, 50.0),  # lognorm scale range
 ]
 
 # Sample size for final result distribution
