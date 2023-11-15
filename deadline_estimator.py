@@ -173,7 +173,6 @@ def find_distribution(time_threshold_pair):
 
         shape = solution.x[0]
         scale = solution.x[1]
-        lognorm_vars.append((shape, scale))
 
         time_a = time_threshold_pair[0]
         prob_a = lognorm.cdf(time_a, shape, scale=scale)
