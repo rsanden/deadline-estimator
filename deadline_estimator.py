@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 
-import sys
+import sys, os
 import argparse
 import re
+import pickle
 import numpy as np
 from scipy.stats import lognorm
 from scipy.optimize import differential_evolution
@@ -303,6 +304,10 @@ if __name__ == "__main__":
     )
 
     found_distributions = {}
+    if os.path.isfile("distributions_cache.pickle"):
+        with open("distributions_cache.pickle", "rb") as fp:
+            found_distributions = pickle.load(fp)
+
     lognorm_vars = []
     for i, time_threshold_pair in enumerate(time_threshold_pairs):
         if time_threshold_pair not in found_distributions:
@@ -315,6 +320,9 @@ if __name__ == "__main__":
         print(
             f"Task {i:03d}: shape={shape:0.4f}, scale={scale:0.4f}, p({time_a:05.2f})={prob_a*100:0.2f}%, p({time_b:05.2f})={prob_b*100:0.2f}%"
         )
+
+    with open("distributions_cache.pickle", "wb") as fp:
+        pickle.dump(found_distributions, fp)
 
     totals = np.zeros(N)
     for lognorm_var in lognorm_vars:
