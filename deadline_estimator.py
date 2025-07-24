@@ -310,12 +310,13 @@ if __name__ == "__main__":
 
     lognorm_vars = []
     for i, time_threshold_pair in enumerate(time_threshold_pairs):
-        if time_threshold_pair not in found_distributions:
-            found_distributions[time_threshold_pair] = find_distribution(
+        distribution_key = (tuple(confidence_levels), time_threshold_pair)
+        if distribution_key not in found_distributions:
+            found_distributions[distribution_key] = find_distribution(
                 time_threshold_pair
             )
         time_a, time_b = time_threshold_pair
-        shape, scale, prob_a, prob_b = found_distributions[time_threshold_pair]
+        shape, scale, prob_a, prob_b = found_distributions[distribution_key]
         lognorm_vars.append((shape, scale))
         print(
             f"Task {i:03d}: shape={shape:0.4f}, scale={scale:0.4f}, p({time_a:05.2f})={prob_a*100:0.2f}%, p({time_b:05.2f})={prob_b*100:0.2f}%"
