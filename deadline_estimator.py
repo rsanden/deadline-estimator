@@ -62,8 +62,12 @@ NUM_BINS = 100
 
 def get_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--no-plot", action="store_true", help="Don't plot anything (default: plot PDF)")
-    parser.add_argument("--plot-cdf", action="store_true", help="plot result CDF instead of PDF")
+    parser.add_argument(
+        "--no-plot", action="store_true", help="Don't plot anything (default: plot PDF)"
+    )
+    parser.add_argument(
+        "--plot-cdf", action="store_true", help="plot result CDF instead of PDF"
+    )
     parser.add_argument(
         "--no-plot-deadline",
         action="store_true",
@@ -160,7 +164,7 @@ def get_cost_fn(time_threshold_pairs, confidence_levels):
             lognorm.cdf(time_threshold_pairs[1], params[0], scale=params[1])
             - confidence_levels[1]
         )
-        return eq1 ** 2 + eq2 ** 2
+        return eq1**2 + eq2**2
 
     return cost_fn
 
