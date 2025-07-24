@@ -62,24 +62,24 @@ NUM_BINS = 100
 
 def get_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--plot-pdf", action="store_true", help="plot result PDF")
-    parser.add_argument("--plot-cdf", action="store_true", help="plot result CDF")
+    parser.add_argument("--no-plot", action="store_true", help="Don't plot anything (default: plot PDF)")
+    parser.add_argument("--plot-cdf", action="store_true", help="plot result CDF instead of PDF")
     parser.add_argument(
-        "--plot-deadline",
+        "--no-plot-deadline",
         action="store_true",
-        help="plot vertical deadline on PDF and CDF",
+        help="Don't plot vertical deadline on PDF and CDF (default: Plot deadline)",
     )
     parser.add_argument(
         "--plot-term",
         type=str,
         default="wxt",
-        help="gnuplot terminal (ex: 'wxt', 'qt', 'x11', 'dumb size 128,48', 'png size 800,450', 'svg')",
+        help="Gnuplot terminal (ex: 'wxt', 'qt', 'x11', 'dumb size 128,48', 'png size 800,450', 'svg') (default: 'wxt')",
     )
     parser.add_argument("estimate_fpath", type=str, help="estimate filepath")
     parser.add_argument(
-        "deadline_days",
+        "deadline_mandays",
         type=float,
-        help="deadline (days from now) to calculate final on-time probability",
+        help="Deadline (effective-man-days from now) to calculate final on-time probability",
     )
     return parser.parse_args(sys.argv[1:])
 
@@ -338,23 +338,23 @@ if __name__ == "__main__":
     print(f"Aggregate mean:   {agg_mean:0.4f}")
     print(f"Aggregate stdev:  {agg_stdev:0.4f}")
 
-    agg_prob = np.count_nonzero(totals < args.deadline_days) / float(N)
+    agg_prob = np.count_nonzero(totals < args.deadline_mandays) / float(N)
     print(
-        f"Probability to complete within {args.deadline_days:0.2f} effective man-days: {agg_prob*100:0.2f}%"
+        f"Probability to complete within {args.deadline_mandays:0.2f} effective man-days: {agg_prob*100:0.2f}%"
     )
 
-    if args.plot_pdf:
-        plot_pdf_histogram(
-            totals,
-            num_bins=NUM_BINS,
-            deadline=args.deadline_days if args.plot_deadline else None,
-            gnuplot_term=args.plot_term,
-        )
-
-    if args.plot_cdf:
-        plot_cdf_histogram(
-            totals,
-            num_bins=NUM_BINS,
-            deadline=args.deadline_days if args.plot_deadline else None,
-            gnuplot_term=args.plot_term,
-        )
+    if not args.no_plot:
+        if args.plot_cdf:
+            plot_cdf_histogram(
+                totals,
+                num_bins=NUM_BINS,
+                deadline=args.deadline_mandays if not args.no_plot_deadline else None,
+                gnuplot_term=args.plot_term,
+            )
+        else:
+            plot_pdf_histogram(
+                totals,
+                num_bins=NUM_BINS,
+                deadline=args.deadline_mandays if not args.no_plot_deadline else None,
+                gnuplot_term=args.plot_term,
+            )
