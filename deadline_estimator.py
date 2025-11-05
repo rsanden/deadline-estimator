@@ -322,9 +322,9 @@ if __name__ == "__main__":
         time_a, time_b = time_threshold_pair
         shape, scale, prob_a, prob_b = found_distributions[distribution_key]
         lognorm_vars.append((shape, scale))
-        print(
-            f"Task {i:03d}: shape={shape:0.4f}, scale={scale:0.4f}, p({time_a:05.2f})={prob_a*100:0.2f}%, p({time_b:05.2f})={prob_b*100:0.2f}%"
-        )
+        # print(
+        #     f"Task {i:03d}: shape={shape:0.4f}, scale={scale:0.4f}, p({time_a:05.2f})={prob_a*100:0.2f}%, p({time_b:05.2f})={prob_b*100:0.2f}%"
+        # )
 
     with open("distributions_cache.pickle", "wb") as fp:
         pickle.dump(found_distributions, fp)
